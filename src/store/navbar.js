@@ -92,7 +92,7 @@ if (!window.localStorage.getItem(CODE_NUM)) {
 }
 
 if (!window.localStorage.getItem(PREVIEW_TYPE)) {
-  window.localStorage.setItem(PREVIEW_TYPE, "mobile");
+  window.localStorage.setItem(PREVIEW_TYPE, "pc");
 }
 
 if (!window.localStorage.getItem(IS_SYNC_SCROLL)) {
