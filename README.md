@@ -12,6 +12,7 @@
 - 内置 20+ 排版主题，一键切换
 - 代码高亮，默认 **atom-one-dark** 风格，支持 Mac 风格代码块
 - 支持数学公式（KaTeX / MathJax）
+- 支持 Mermaid 图表（流程图、时序图等），复制时自动转为 PNG 图片
 - 支持图片上传（阿里 OSS、七牛）
 - 一键复制到微信公众号编辑器
 
@@ -55,11 +56,27 @@ yarn start
 yarn build
 ```
 
+## Mermaid 图表
+
+支持在编辑器中使用 mermaid 代码块渲染图表，复制到微信/知乎/掘金时自动转为 PNG 图片。
+
+````markdown
+```mermaid
+graph TD
+    A[开始] --> B{判断}
+    B -->|是| C[执行]
+    B -->|否| D[结束]
+```
+````
+
+支持的图表类型：流程图、时序图、甘特图、类图、状态图、饼图等。
+
 ## 技术栈
 
 - React 16
 - MobX 5
 - markdown-it
+- Mermaid 8
 - CodeMirror
 - Webpack 4
 
