@@ -6,6 +6,7 @@ import PreviewType from "../component/Sidebar/PreviewType";
 import Wechat from "../component/Sidebar/Wechat";
 import Zhihu from "../component/Sidebar/Zhihu";
 import Juejin from "../component/Sidebar/Juejin";
+import WecomDoc from "../component/Sidebar/WecomDoc";
 import "./Sidebar.css";
 
 // @inject("userInfo")
@@ -23,6 +24,7 @@ class Sidebar extends Component {
         <Wechat />
         <Zhihu />
         <Juejin />
+        <WecomDoc />
         <PreviewType />
       </div>
     );

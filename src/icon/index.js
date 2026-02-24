@@ -13,6 +13,7 @@ import PC from "./PC";
 import Wechat from "./Wechat";
 import Zhihu from "./Zhihu";
 import Juejin from "./Juejin";
+import WecomDoc from "./WecomDoc";
 import Close from "./Close";
 import FontCase from "./FontCase";
 import Replace from "./Replace";
@@ -46,6 +47,8 @@ export default (props) => {
       return <Zhihu {...props} />;
     case "juejin":
       return <Juejin {...props} />;
+    case "wecom-doc":
+      return <WecomDoc {...props} />;
     case "close":
       return <Close {...props} />;
     case "fontCase":
