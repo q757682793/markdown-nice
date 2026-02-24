@@ -47,13 +47,13 @@
 
 ```bash
 # 安装依赖
-yarn install
+npm install
 
 # 启动开发服务
-yarn start
+npm start
 
 # 构建生产版本
-yarn build
+npm run build
 ```
 
 ## Mermaid 图表
