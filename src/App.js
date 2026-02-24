@@ -92,6 +92,7 @@ class App extends Component {
     });
     this.setEditorContent();
     this.setCustomImageHosting();
+    this.renderMermaid();
   }
 
   componentDidUpdate() {

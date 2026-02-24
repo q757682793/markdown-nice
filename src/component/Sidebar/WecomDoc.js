@@ -18,13 +18,17 @@ class WecomDoc extends Component {
     this.html = "";
   }
 
-  // 企微文档不会自动撑开表格宽度，需要显式设置 width: 100%
-  solveWecomTable = (html) => {
-    return html.replace(/<table([^>]*?)>/g, (match, attrs) => {
-      if (/style\s*=\s*"/.test(attrs)) {
-        return match.replace(/style\s*=\s*"/, 'style="width: 100%; ');
+  // 企微文档不识别 CSS 百分比宽度，在 DOM 上设置实际渲染像素宽度后再走 solveHtml 内联
+  solveWecomTable = () => {
+    const layout = document.getElementById(LAYOUT_ID);
+    if (!layout) return;
+    const tables = layout.querySelectorAll("table");
+    tables.forEach((table) => {
+      const width = table.offsetWidth;
+      if (width > 0) {
+        table.setAttribute("width", width);
+        table.style.width = width + "px";
       }
-      return `<table${attrs} style="width: 100%;">`;
     });
   };
 
@@ -33,7 +37,8 @@ class WecomDoc extends Component {
     const html = layout.innerHTML;
     solveWeChatMath();
     await solveMermaid();
-    this.html = this.solveWecomTable(solveHtml());
+    this.solveWecomTable();
+    this.html = solveHtml();
     copySafari(this.html);
     message.success("已复制，请到企微文档粘贴");
     layout.innerHTML = html;
