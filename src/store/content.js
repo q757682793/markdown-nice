@@ -1,6 +1,8 @@
 import {observable, action} from "mobx";
 import {
   CONTENT,
+  CONTENT_VERSION,
+  CURRENT_CONTENT_VERSION,
   STYLE,
   TEMPLATE_OPTIONS,
   TEMPLATE_NUM,
@@ -50,9 +52,13 @@ class Content {
 
 const store = new Content();
 
-// 如果为空先把数据放进去
-if (window.localStorage.getItem(CONTENT) === null) {
+// 如果为空或示例文档版本过旧，加载最新示例内容
+if (
+  window.localStorage.getItem(CONTENT) === null ||
+  window.localStorage.getItem(CONTENT_VERSION) !== CURRENT_CONTENT_VERSION
+) {
   window.localStorage.setItem(CONTENT, TEMPLATE.content);
+  window.localStorage.setItem(CONTENT_VERSION, CURRENT_CONTENT_VERSION);
 }
 if (!window.localStorage.getItem(STYLE)) {
   window.localStorage.setItem(STYLE, TEMPLATE.style.custom);
