@@ -265,9 +265,33 @@ Markdown Nice 这么好用，简直是{喜大普奔|hē hē hē hē}呀！
 <span style="display:block;text-align:right;color:orangered;">橙色居右</span>
 <span style="display:block;text-align:center;color:orangered;">橙色居中</span>
 
-### 5.2 UML
+### 5.2 Mermaid 图表
 
-不支持，推荐使用开源工具`https://draw.io/`制作后再导入图片
+支持使用 Mermaid 语法绘制流程图、时序图、甘特图等，复制到微信/知乎/掘金/企微文档时自动转为 PNG 图片。
+
+流程图示例：
+
+```mermaid
+graph LR
+    A[Markdown] --> B{编辑器}
+    B --> C[微信公众号]
+    B --> D[知乎]
+    B --> E[掘金]
+    B --> F[企微文档]
+```
+
+时序图示例：
+
+```mermaid
+sequenceDiagram
+    participant 用户
+    participant 编辑器
+    participant 图床
+    用户->>编辑器: 编写 Markdown
+    编辑器->>图床: 上传图片
+    图床-->>编辑器: 返回图片链接
+    编辑器-->>用户: 渲染预览
+```
 
 ### 5.3 组件图床
 
