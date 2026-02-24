@@ -13,6 +13,7 @@
 - 代码高亮，默认 **atom-one-dark** 风格，支持 Mac 风格代码块
 - 支持数学公式（KaTeX / MathJax）
 - 支持 Mermaid 图表（流程图、时序图等），复制时自动转为 PNG 图片
+- 支持 Draw.io 图表，粘贴 XML 即可渲染，复制时自动转为 PNG 图片
 - 支持图片上传（阿里 OSS、七牛）
 - 一键复制到微信公众号编辑器
 
@@ -71,12 +72,35 @@ graph TD
 
 支持的图表类型：流程图、时序图、甘特图、类图、状态图、饼图等。
 
+## Draw.io 图表
+
+支持在编辑器中使用 drawio 代码块渲染 Draw.io 图表，复制到微信/知乎/掘金/企微文档时自动转为 PNG 图片。
+
+在 Draw.io 编辑器中导出 XML，粘贴到 drawio 代码块中即可：
+
+````markdown
+```drawio
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="2" value="开始" style="rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="100" y="100" width="120" height="60" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
+```
+````
+
+Draw.io viewer 从 CDN 懒加载，仅在检测到 drawio 代码块时才会加载。
+
 ## 技术栈
 
 - React 16
 - MobX 5
 - markdown-it
 - Mermaid 8
+- Draw.io Viewer (CDN)
 - CodeMirror
 - Webpack 4
 

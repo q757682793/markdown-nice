@@ -8,7 +8,7 @@
 
 - 支持自定义样式的 Markdown 编辑器
 - 支持微信公众号、知乎、稀土掘金和企业微信文档
-- 支持 Mermaid 图表渲染，复制时自动转为 PNG 图片
+- 支持 Mermaid 和 Draw.io 图表渲染，复制时自动转为 PNG 图片
 
 ## 2 示例文章
 
@@ -294,7 +294,49 @@ sequenceDiagram
     编辑器-->>用户: 渲染预览
 ```
 
-### 5.3 组件图床
+### 5.3 Draw.io 图表
+
+支持使用 Draw.io XML 绘制架构图、流程图等，复制到微信/知乎/掘金/企微文档时自动转为 PNG 图片。
+
+在代码块中使用 `drawio` 语言标记，粘贴 Draw.io 导出的 XML 即可渲染：
+
+```drawio
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="2" value="用户" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="160" y="20" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="3" value="编辑器" style="whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="160" y="100" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="4" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="2" target="3" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="5" value="微信" style="whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="40" y="180" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="6" value="知乎" style="whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="170" y="180" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="7" value="掘金" style="whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="300" y="180" width="100" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="8" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="3" target="5" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="9" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="3" target="6" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="10" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="3" target="7" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
+```
+
+### 5.4 组件图床
 
 组件目前共支持 3 种图床和 1 种自定义图床，主要特点如下：
 
@@ -314,6 +356,6 @@ sequenceDiagram
 | 七牛云 | 配置繁琐，需购买长期域名 |
 | 自定义 | 搭建后台繁琐 |
 
-### 5.4 更多文档
+### 5.5 更多文档
 
 更多文档请参考 [mdnice 产品主页](https://product.mdnice.com/articles/ "更多文档")

@@ -44,8 +44,11 @@ class App extends Component {
     this.focus = false;
     this.scale = 1;
     this.mermaidId = 0;
+    this.drawioViewerReady = false;
+    this.drawioViewerLoading = false;
     this.handleUpdateMathjax = throttle(updateMathjax, 1500);
     this.handleRenderMermaid = throttle(this.renderMermaid, 1500);
+    this.handleRenderDrawio = throttle(this.renderDrawio, 1500);
   }
 
   componentDidMount() {
@@ -93,6 +96,7 @@ class App extends Component {
     this.setEditorContent();
     this.setCustomImageHosting();
     this.renderMermaid();
+    this.renderDrawio();
   }
 
   componentDidUpdate() {
@@ -100,6 +104,7 @@ class App extends Component {
       this.handleUpdateMathjax();
     }
     this.handleRenderMermaid();
+    this.handleRenderDrawio();
   }
 
   componentWillUnmount() {
@@ -250,6 +255,63 @@ class App extends Component {
         container.innerHTML = `<pre style="color:red;">${e.message || "Mermaid render error"}</pre>`;
       }
     });
+  };
+
+  loadDrawioViewer = () => {
+    if (this.drawioViewerReady || this.drawioViewerLoading) return Promise.resolve();
+    this.drawioViewerLoading = true;
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://viewer.diagrams.net/js/viewer-static.min.js";
+      script.onload = () => {
+        this.drawioViewerReady = true;
+        this.drawioViewerLoading = false;
+        resolve(true);
+      };
+      script.onerror = () => {
+        this.drawioViewerLoading = false;
+        resolve(false);
+      };
+      document.head.appendChild(script);
+    });
+  };
+
+  renderDrawioContainers = (containers) => {
+    containers.forEach((container) => {
+      const encoded = container.getAttribute("data-drawio");
+      try {
+        const xml = decodeURIComponent(escape(atob(encoded)));
+        if (window.GraphViewer) {
+          const config = JSON.stringify({highlight: "#0000ff", resize: true, xml: xml});
+          const graphDiv = document.createElement("div");
+          graphDiv.className = "mxgraph";
+          graphDiv.setAttribute("data-mxgraph", config);
+          graphDiv.style.maxWidth = "100%";
+          container.innerHTML = "";
+          container.appendChild(graphDiv);
+          window.GraphViewer.createViewerForElement(graphDiv);
+          container.setAttribute("data-rendered", "true");
+        } else {
+          container.innerHTML = '<pre style="color:orange;">Draw.io viewer failed to load</pre>';
+        }
+      } catch (e) {
+        container.innerHTML = `<pre style="color:red;">${e.message || "Draw.io render error"}</pre>`;
+      }
+    });
+  };
+
+  renderDrawio = () => {
+    const layout = document.getElementById(LAYOUT_ID);
+    if (!layout) return;
+    const containers = layout.querySelectorAll('.drawio-container[data-drawio]:not([data-rendered="true"])');
+    if (containers.length === 0) return;
+    if (this.drawioViewerReady && window.GraphViewer) {
+      this.renderDrawioContainers(containers);
+    } else {
+      this.loadDrawioViewer().then((success) => {
+        if (success) this.renderDrawioContainers(containers);
+      });
+    }
   };
 
   addContainer(math, doc) {

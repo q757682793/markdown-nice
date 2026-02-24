@@ -12,7 +12,7 @@ export const MJX_DATA_FORMULA_TYPE = "data-formula-type";
 
 export const CONTENT = "content";
 export const CONTENT_VERSION = "content_version";
-export const CURRENT_CONTENT_VERSION = "2";
+export const CURRENT_CONTENT_VERSION = "3";
 export const STYLE = "style";
 export const TEMPLATE_NUM = "template_num";
 export const CODE_NUM = "code_num";

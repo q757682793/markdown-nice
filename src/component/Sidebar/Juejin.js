@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import {message, Tooltip} from "antd";
 
-import {solveHtml, solveJuejinMath, juejinSuffix, solveMermaid, copySafari} from "../../utils/converter";
+import {solveHtml, solveJuejinMath, juejinSuffix, solveMermaid, solveDrawio, copySafari} from "../../utils/converter";
 import {LAYOUT_ID, CODE_NUM, ENTER_DELAY, LEAVE_DELAY} from "../../utils/constant";
 import SvgIcon from "../../icon";
 import "./Juejin.css";
@@ -28,6 +28,7 @@ class Juejin extends Component {
     solveJuejinMath();
     juejinSuffix();
     await solveMermaid();
+    await solveDrawio();
     this.html = solveHtml();
     copySafari(this.html);
     message.success("已复制且添加 mdnice 排版后缀，感谢宣传，请到稀土掘金粘贴");

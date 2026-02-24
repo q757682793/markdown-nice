@@ -138,6 +138,86 @@ export const solveMermaid = async () => {
   await Promise.all(promises);
 };
 
+// Convert draw.io SVG to PNG, preserving text labels by converting
+// foreignObject elements to native SVG <text> before removing them.
+const drawioSvgToPng = (svgElement) => {
+  return new Promise((resolve, reject) => {
+    const cloned = svgElement.cloneNode(true);
+    cloned.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+
+    const foreignObjects = cloned.querySelectorAll("foreignObject");
+    foreignObjects.forEach((fo) => {
+      const text = fo.textContent.trim();
+      if (!text) {
+        fo.remove();
+        return;
+      }
+      const innerDiv = fo.querySelector("div");
+      const style = innerDiv ? innerDiv.getAttribute("style") || "" : "";
+      const ptMatch = style.match(/padding-top:\s*([\d.]+)px/);
+      const mlMatch = style.match(/margin-left:\s*([\d.]+)px/);
+      const wMatch = style.match(/width:\s*([\d.]+)px/);
+
+      if (ptMatch && mlMatch && wMatch) {
+        const y = parseFloat(ptMatch[1]);
+        const x = parseFloat(mlMatch[1]) + parseFloat(wMatch[1]) / 2;
+        const svgText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        svgText.setAttribute("x", x);
+        svgText.setAttribute("y", y);
+        svgText.setAttribute("text-anchor", "middle");
+        svgText.setAttribute("dominant-baseline", "central");
+        svgText.setAttribute("font-size", "12");
+        svgText.setAttribute("font-family", "Helvetica, Arial, sans-serif");
+        svgText.textContent = text;
+        fo.parentNode.insertBefore(svgText, fo);
+      }
+      fo.remove();
+    });
+
+    const svgData = new XMLSerializer().serializeToString(cloned);
+    const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+
+    const img = new Image();
+    img.onload = () => {
+      const scale = 2;
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = (e) => reject(e);
+    img.src = svgDataUrl;
+  });
+};
+
+// Replace all rendered draw.io diagrams with inline PNG <img> tags
+export const solveDrawio = async () => {
+  const layout = document.getElementById(LAYOUT_ID);
+  if (!layout) return;
+
+  const containers = layout.querySelectorAll('.drawio-container[data-rendered="true"]');
+  const promises = Array.from(containers).map(async (container) => {
+    const svg = container.querySelector("svg");
+    if (!svg) return;
+
+    const bbox = svg.getBoundingClientRect();
+    if (!svg.getAttribute("width")) svg.setAttribute("width", bbox.width);
+    if (!svg.getAttribute("height")) svg.setAttribute("height", bbox.height);
+
+    try {
+      const pngDataUrl = await drawioSvgToPng(svg);
+      container.innerHTML = `<img src="${pngDataUrl}" style="max-width:100%;" alt="drawio diagram" />`;
+    } catch (e) {
+      console.warn("Draw.io SVG to PNG conversion failed:", e);
+    }
+  });
+
+  await Promise.all(promises);
+};
+
 export const solveHtml = () => {
   const element = document.getElementById(BOX_ID);
 

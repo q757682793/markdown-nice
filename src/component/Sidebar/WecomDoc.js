@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import {message, Tooltip} from "antd";
 
-import {solveWeChatMath, solveMermaid, solveHtml, copySafari} from "../../utils/converter";
+import {solveWeChatMath, solveMermaid, solveDrawio, solveHtml, copySafari} from "../../utils/converter";
 import {LAYOUT_ID, ENTER_DELAY, LEAVE_DELAY} from "../../utils/constant";
 import SvgIcon from "../../icon";
 import "./WecomDoc.css";
@@ -37,6 +37,7 @@ class WecomDoc extends Component {
     const html = layout.innerHTML;
     solveWeChatMath();
     await solveMermaid();
+    await solveDrawio();
     this.solveWecomTable();
     this.html = solveHtml();
     copySafari(this.html);

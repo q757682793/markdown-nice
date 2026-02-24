@@ -12,6 +12,7 @@ import markdownItImageFlow from "./markdown-it-imageflow";
 import highlightjs from "./langHighlight";
 import markdownItLiReplacer from "./markdown-it-li";
 import markdownItMermaid from "./markdown-it-mermaid";
+import markdownItDrawio from "./markdown-it-drawio";
 
 export const axiosGithub = axios.create({
   baseURL: "https://api.github.com",
@@ -93,7 +94,8 @@ markdownParserWechat
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
   .use(markdownItImageFlow) // 横屏移动插件
-  .use(markdownItMermaid); // Mermaid 图表
+  .use(markdownItMermaid) // Mermaid 图表
+  .use(markdownItDrawio); // Draw.io 图表
 
 // 普通解析器，代码高亮用highlight
 export const markdownParser = new MarkdownIt({
@@ -130,7 +132,8 @@ markdownParser
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
   .use(markdownItImageFlow) // 横屏移动插件
-  .use(markdownItMermaid); // Mermaid 图表
+  .use(markdownItMermaid) // Mermaid 图表
+  .use(markdownItDrawio); // Draw.io 图表
 
 export const replaceStyle = (id, css) => {
   const style = document.getElementById(id);
