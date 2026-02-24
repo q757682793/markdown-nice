@@ -36,42 +36,38 @@ class AboutDialog extends Component {
           paddingTop: "5px",
         }}
       >
-        <h3 style={style.headerMargin}>
-          Markdown Nice
-          <a
-            id="nice-about-dialog-star"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/mdnice/markdown-nice"
-            style={style.noBorder}
-          >
-            <img alt="" style={style.img} src="https://badgen.net/github/stars/mdnice/markdown-nice" />
-          </a>
-        </h3>
+        <h3 style={style.headerMargin}>Markdown Nice</h3>
 
+        <p style={style.lineHeight}>一款支持自定义样式的 Markdown 编辑器，专注于微信公众号排版，让排版变简单。</p>
         <p style={style.lineHeight}>
-          本项目 fork 自
-          <a
-            id="nice-about-dialog-github"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/mdnice/markdown-nice"
-          >
-            &nbsp;Markdown Nice&nbsp;
+          本项目基于
+          <a rel="noopener noreferrer" target="_blank" href="https://github.com/whaoa/markdown-nice">
+            &nbsp;whaoa/markdown-nice&nbsp;
           </a>
-          ，基于 [master 分支的 8f5205c] 进行的二次修改。
+          进行二次开发。
         </p>
-        <p style={style.lineHeight}>支持自定义样式的 Markdown 编辑器；</p>
-        <p style={style.lineHeight}>支持微信公众号、知乎和稀土掘金；</p>
-        <p style={style.lineHeight}>
-          <a
-            id="nice-about-dialog-github"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/whaoa/markdown-nice"
-          >
-            &nbsp;本项目 GitHub 仓库&nbsp;
+        <p style={{...style.lineHeight, marginTop: "8px", fontWeight: "bold"}}>功能特性</p>
+        <ul style={style.featureList}>
+          <li>Markdown 实时编辑与预览</li>
+          <li>内置 20+ 排版主题，一键切换</li>
+          <li>代码高亮，支持 Mac 风格代码块</li>
+          <li>支持数学公式（KaTeX / MathJax）</li>
+          <li>支持 Mermaid 图表，复制时自动转为 PNG</li>
+          <li>支持 Draw.io 图表，复制时自动转为 PNG</li>
+          <li>一键复制到企微文档、微信公众号等编辑器</li>
+        </ul>
+        <p style={{...style.lineHeight, marginTop: "8px"}}>
+          GitHub：
+          <a rel="noopener noreferrer" target="_blank" href="https://github.com/q757682793/markdown-nice">
+            q757682793/markdown-nice
           </a>
+        </p>
+        <p style={style.lineHeight}>
+          致谢：
+          <a rel="noopener noreferrer" target="_blank" href="https://github.com/mdnice/markdown-nice">
+            mdnice/markdown-nice
+          </a>
+          &nbsp;及所有贡献者
         </p>
       </Modal>
     );
@@ -79,14 +75,6 @@ class AboutDialog extends Component {
 }
 
 const style = {
-  leftImgWidth: {
-    width: "40%",
-    height: "100%",
-  },
-  rightImgWidth: {
-    width: "60%",
-    height: "100%",
-  },
   headerMargin: {
     marginTop: "5px",
     marginBottom: "5px",
@@ -98,13 +86,11 @@ const style = {
     padding: 0,
     margin: 0,
   },
-  img: {
-    width: "70px",
-    marginLeft: "10px",
-    display: "inline-block",
-  },
-  noBorder: {
-    border: "none",
+  featureList: {
+    lineHeight: "26px",
+    color: "black",
+    paddingLeft: "20px",
+    margin: "4px 0",
   },
 };
 
