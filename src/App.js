@@ -25,6 +25,7 @@ import {
   MJX_DATA_FORMULA,
   MJX_DATA_FORMULA_TYPE,
 } from "./utils/constant";
+import mermaid from "mermaid";
 import {markdownParser, markdownParserWechat, updateMathjax} from "./utils/helper";
 import pluginCenter from "./utils/pluginCenter";
 import appContext from "./utils/appContext";
@@ -42,7 +43,9 @@ class App extends Component {
     super(props);
     this.focus = false;
     this.scale = 1;
+    this.mermaidId = 0;
     this.handleUpdateMathjax = throttle(updateMathjax, 1500);
+    this.handleRenderMermaid = throttle(this.renderMermaid, 1500);
   }
 
   componentDidMount() {
@@ -81,6 +84,12 @@ class App extends Component {
     } catch (e) {
       console.log(e);
     }
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "default",
+      flowchart: {htmlLabels: false},
+      securityLevel: "loose",
+    });
     this.setEditorContent();
     this.setCustomImageHosting();
   }
@@ -89,6 +98,7 @@ class App extends Component {
     if (pluginCenter.mathjax) {
       this.handleUpdateMathjax();
     }
+    this.handleRenderMermaid();
   }
 
   componentWillUnmount() {
@@ -218,6 +228,27 @@ class App extends Component {
         uploadAdaptor({file: e.clipboardData.files[i], content: this.props.content});
       }
     }
+  };
+
+  renderMermaid = () => {
+    const layout = document.getElementById(LAYOUT_ID);
+    if (!layout) return;
+    const containers = layout.querySelectorAll(".mermaid-container[data-mermaid]");
+    containers.forEach((container) => {
+      // Skip already rendered containers
+      if (container.getAttribute("data-rendered") === "true") return;
+      const encoded = container.getAttribute("data-mermaid");
+      try {
+        const source = decodeURIComponent(escape(atob(encoded)));
+        const id = `mermaid-svg-${this.mermaidId++}`;
+        mermaid.render(id, source, (svgCode) => {
+          container.innerHTML = svgCode;
+          container.setAttribute("data-rendered", "true");
+        });
+      } catch (e) {
+        container.innerHTML = `<pre style="color:red;">${e.message || "Mermaid render error"}</pre>`;
+      }
+    });
   };
 
   addContainer(math, doc) {

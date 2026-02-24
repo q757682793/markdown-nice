@@ -83,6 +83,61 @@ export const juejinSuffix = () => {
   element.appendChild(suffix);
 };
 
+// Convert a single SVG element to a PNG data URL via Canvas
+const svgToPng = (svgElement) => {
+  return new Promise((resolve, reject) => {
+    const cloned = svgElement.cloneNode(true);
+    // Ensure xmlns is set for standalone SVG serialization
+    cloned.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    // Remove foreignObject elements that taint the canvas
+    const foreignObjects = cloned.querySelectorAll("foreignObject");
+    foreignObjects.forEach((fo) => fo.remove());
+
+    const svgData = new XMLSerializer().serializeToString(cloned);
+    const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+
+    const img = new Image();
+    img.onload = () => {
+      const scale = 2; // Retina quality
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/png"));
+    };
+    img.onerror = (e) => reject(e);
+    img.src = svgDataUrl;
+  });
+};
+
+// Replace all rendered mermaid SVGs with inline PNG <img> tags
+export const solveMermaid = async () => {
+  const layout = document.getElementById(LAYOUT_ID);
+  if (!layout) return;
+
+  const containers = layout.querySelectorAll('.mermaid-container[data-rendered="true"]');
+  const promises = Array.from(containers).map(async (container) => {
+    const svg = container.querySelector("svg");
+    if (!svg) return;
+
+    // Ensure SVG has explicit dimensions for canvas rendering
+    const bbox = svg.getBoundingClientRect();
+    if (!svg.getAttribute("width")) svg.setAttribute("width", bbox.width);
+    if (!svg.getAttribute("height")) svg.setAttribute("height", bbox.height);
+
+    try {
+      const pngDataUrl = await svgToPng(svg);
+      container.innerHTML = `<img src="${pngDataUrl}" style="max-width:100%;" alt="mermaid diagram" />`;
+    } catch (e) {
+      console.warn("Mermaid SVG to PNG conversion failed:", e);
+    }
+  });
+
+  await Promise.all(promises);
+};
+
 export const solveHtml = () => {
   const element = document.getElementById(BOX_ID);
 

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import {message, Tooltip} from "antd";
 
-import {solveHtml, solveJuejinMath, juejinSuffix, copySafari} from "../../utils/converter";
+import {solveHtml, solveJuejinMath, juejinSuffix, solveMermaid, copySafari} from "../../utils/converter";
 import {LAYOUT_ID, CODE_NUM, ENTER_DELAY, LEAVE_DELAY} from "../../utils/constant";
 import SvgIcon from "../../icon";
 import "./Juejin.css";
@@ -18,7 +18,7 @@ class Juejin extends Component {
     this.html = "";
   }
 
-  copyJuejin = () => {
+  copyJuejin = async () => {
     if (window.localStorage.getItem(CODE_NUM) === "0") {
       message.warning("您当前使用的是微信代码主题，请切换其他代码主题后再试！");
       return;
@@ -27,6 +27,7 @@ class Juejin extends Component {
     const html = layout.innerHTML;
     solveJuejinMath();
     juejinSuffix();
+    await solveMermaid();
     this.html = solveHtml();
     copySafari(this.html);
     message.success("已复制且添加 mdnice 排版后缀，感谢宣传，请到稀土掘金粘贴");

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import {message, Tooltip} from "antd";
 
-import {solveWeChatMath, solveHtml, copySafari} from "../../utils/converter";
+import {solveWeChatMath, solveMermaid, solveHtml, copySafari} from "../../utils/converter";
 import {LAYOUT_ID, ENTER_DELAY, LEAVE_DELAY} from "../../utils/constant";
 import SvgIcon from "../../icon";
 import "./Wechat.css";
@@ -18,10 +18,11 @@ class Wechat extends Component {
     this.html = "";
   }
 
-  copyWechat = () => {
+  copyWechat = async () => {
     const layout = document.getElementById(LAYOUT_ID); // 保护现场
     const html = layout.innerHTML;
     solveWeChatMath();
+    await solveMermaid();
     this.html = solveHtml();
     copySafari(this.html);
     message.success("已复制，请到微信公众平台粘贴");
